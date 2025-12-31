@@ -2,6 +2,7 @@ import express, { Request } from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import dotenv from "dotenv";
 import { authMiddleware } from "./lib/middleware";
+import cors from "cors";
 
 dotenv.config();
 
@@ -9,6 +10,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 console.log(process.env.AUTH_SERVICE_URL);
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "OPTIONS", "PATCH", "DELETE", "PUT"],
+  })
+);
+
 app.use(
   "/auth/{*splat}",
   createProxyMiddleware({
